@@ -33,7 +33,7 @@
         <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.3.1</maven-failsafe-plugin.version>
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-        <maven-pmd-plugin.version>3.24.0</maven-pmd-plugin.version>
+        <maven-pmd-plugin.version>3.25.0</maven-pmd-plugin.version>
         <owasp.dependency-check-maven.version>10.0.3</owasp.dependency-check-maven.version>
 
         <qa.directory>${project.basedir}/src/qa</qa.directory>
