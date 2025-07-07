@@ -2,6 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <prerequisites>
+        <maven>3.6.3</maven>
+    </prerequisites>
+
     <groupId>au.gov.qld.online</groupId>
     <artifactId>selenium-helper</artifactId>
     <version>4.23.0.004-SNAPSHOT</version>
@@ -27,11 +31,11 @@
         <resource.delimiter>@</resource.delimiter>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>4.23.0</selenium.version>
+        <selenium.version>4.33.0</selenium.version>
 
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.3.1</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <maven-pmd-plugin.version>3.24.0</maven-pmd-plugin.version>
         <owasp.dependency-check-maven.version>10.0.3</owasp.dependency-check-maven.version>
@@ -39,7 +43,7 @@
         <qa.directory>${project.basedir}/src/qa</qa.directory>
         <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
         <checkstyle.version>10.17.0</checkstyle.version>
-        <pmd.version>7.4.0</pmd.version>
+        <pmd.version>7.15.0</pmd.version>
         <spotbugs-maven-plugin.version>4.8.6.2</spotbugs-maven-plugin.version>
         <spotbugs.version>4.8.5</spotbugs.version>
         <findsecbugs-plugin.version>1.13.0</findsecbugs-plugin.version>
@@ -53,17 +57,14 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <scope>import</scope>
-                <type>pom</type>
-                <groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.26.3</version>
-            </dependency>
+            <dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId><version>2.19.0</version></dependency>
+            <dependency><scope>import</scope><type>pom</type><groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.27.3</version></dependency>
+            <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.17.0</version></dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>5.9.2</version>
+        <dependency><groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>6.1.0</version>
             <exclusions>
                 <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
                 <exclusion><groupId>com.google.guava</groupId><artifactId>guava</artifactId></exclusion>
@@ -73,44 +74,26 @@
                 <exclusion><groupId>commons-io</groupId><artifactId>commons-io</artifactId></exclusion>
                 <exclusion><groupId>commons-codec</groupId><artifactId>commons-codec</artifactId></exclusion>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId></exclusion>
-                <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.26.2</version>
-            <exclusions>
-                <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.15.0</version>
-        </dependency>
-
-
-
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId><version>1.27.1</version></dependency>
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></dependency>
         <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId><version>${selenium.version}</version>
             <exclusions>
                 <exclusion><groupId>commons-codec</groupId><artifactId>commons-codec</artifactId></exclusion>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId></exclusion>
-                <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
             </exclusions>
         </dependency>
         <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit3-driver</artifactId><version>${selenium.version}</version>
             <exclusions>
                 <exclusion><groupId>commons-codec</groupId><artifactId>commons-codec</artifactId></exclusion>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId></exclusion>
-                <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
             </exclusions>
         </dependency>
+        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>2.0.17</version></dependency>
 
-        <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>2.0.13</version></dependency>
-
-        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.6</version></dependency>
-        <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId><version>5.10.3</version></dependency>
+        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.18</version></dependency>
+        <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId><version>5.13.3</version></dependency>
         <dependency><scope>test</scope><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId></dependency>
     </dependencies>
 
@@ -324,12 +307,12 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-checkstyle-plugin</artifactId><version>${checkstyle.version}</version>
+                    <artifactId>maven-checkstyle-plugin</artifactId><version>${maven-checkstyle-plugin.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>10.17.0</version>
+                            <version>10.26.1</version>
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -370,7 +353,7 @@
                     </configuration>
                     <executions>
                         <execution>
-                            <phase>validate</phase> <!-- too late at prepare-package -->
+                            <phase>prepare-package</phase>
                             <goals>
                                 <goal>check</goal>
                             </goals>

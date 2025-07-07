@@ -58,7 +58,6 @@ public final class SeleniumHelper {
     /**
      * This cleans up anything that used this helper class
      */
-    @SuppressWarnings("PMD.UseTryWithResources") //can't as its a list opened in another place
     private static final Thread CLOSE_THREAD = new Thread() {
         @Override
         public void run() {
@@ -74,8 +73,8 @@ public final class SeleniumHelper {
             }
             for (DriverService service : driverServiceAll) {
                 if (service != null) {
-                    try (service) {
-                        service.stop();
+                    try (DriverService s = service) {
+                        s.stop();
                     } catch (Exception e) {
                         LOGGER.error("exception on close", e);
                     }
@@ -121,7 +120,6 @@ public final class SeleniumHelper {
         return screenprintFolder;
     }
 
-    @SuppressWarnings("PMD.CloseResource") //CloseResource is done on CLOSE_THREAD
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType) {
         return getWebDriver(driverType, null);
     }
