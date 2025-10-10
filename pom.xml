@@ -5,6 +5,7 @@
     <groupId>au.gov.qld.services.selenium</groupId>
     <artifactId>selenium-helper</artifactId>
     <version>4.36.0.002-SNAPSHOT</version>
+    <url>https://github.com/qld-gov-au/selenium-helper</url>
     <name>Selenium Helper for Qld Government</name>
     <description>Selenium Helper for Qld Government - Test helper for integration testing</description>
 
