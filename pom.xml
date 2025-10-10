@@ -50,7 +50,7 @@
         <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
         <checkstyle.version>10.17.0</checkstyle.version>
         <pmd.version>7.10.0</pmd.version>
-        <spotbugs-maven-plugin.version>4.8.6.2</spotbugs-maven-plugin.version>
+        <spotbugs-maven-plugin.version>4.9.6.0</spotbugs-maven-plugin.version>
         <spotbugs.version>4.8.5</spotbugs.version>
         <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
         <sb-contrib.version>7.6.4</sb-contrib.version>
