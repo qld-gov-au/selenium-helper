@@ -87,3 +87,12 @@ In this example the org is ``qld-gov-au`` and the repo is ``kiteworks-integratio
     </distributionManagement>
 ```
 
+### Manual for maven central
+
+mvn release:prepare -Prelease 
+mvn release:perform -Prelease 
+mvn release:clean 
+
+or
+
+mvn deploy -Prelease
