@@ -74,7 +74,7 @@ jobs:
       - name: Try to set a master password
         run: |
           MASTERPWD=$(openssl rand -base64 25)
-          echo "<settingsSecurity> <master>$(mvn --encrypt-master-password "$MASTERPWD")</master></settingsSecurity>" > $HOME/.m2/settings-security.xml
+          echo "<settingsSecurity> <master>$(mvn -Prelease-github --encrypt-master-password "$MASTERPWD")</master></settingsSecurity>" > $HOME/.m2/settings-security.xml
           # echo "MASTERPWD=\"$MASTERPWD\"" >> $GITHUB_ENV
           # The master password isn't actually used, but the maven-gpg-plugin complains otherwise.
 
@@ -86,12 +86,12 @@ jobs:
           git log -3 --no-color --decorate
 
       - name: Mvn Effective POM
-        run: mvn -N help:effective-pom
+        run: mvn -Prelease-github -N help:effective-pom
         env:
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
 
       - name: Mvn Effective Settings
-        run: mvn -N help:effective-settings
+        run: mvn -Prelease-github -N help:effective-settings
         env:
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
 
@@ -110,17 +110,17 @@ jobs:
       - name: Check that we are on snapshot branch before creating the release
         run: |
           echo "Version: "
-          mvn help:evaluate -Dexpression=project.version -q -DforceStdout
-          mvn help:evaluate -Dexpression=project.version -q -DforceStdout | egrep -- '-SNAPSHOT$' > /dev/null || exit 1
+          mvn -Prelease-github help:evaluate -Dexpression=project.version -q -DforceStdout
+          mvn -Prelease-github help:evaluate -Dexpression=project.version -q -DforceStdout | egrep -- '-SNAPSHOT$' > /dev/null || exit 1
           # unfortunately, this would require a snapshot parent if just called from the command line, so we cannot use it: :-(
-          # mvn org.apache.maven.plugins:maven-enforcer-plugin:3.2.1:enforce -Drules=requireSnapshotVersion
+          # mvn -Prelease-github org.apache.maven.plugins:maven-enforcer-plugin:3.2.1:enforce -Drules=requireSnapshotVersion
 
       - name: Dry run of release goals
         run: |
           mvn clean release:clean
-          mvn --batch-mode release:prepare -DdryRun=true -DpushChanges=false  -Djava.io.tmpdir=${{ runner.temp }}
-          mvn --batch-mode release:perform -DdryRun=true -DlocalCheckout=true -DdeployAtEnd=true  -Djava.io.tmpdir=${{ runner.temp }}
-          mvn clean release:clean
+          mvn -Prelease-github --batch-mode release:prepare -DdryRun=true -DpushChanges=false  -Djava.io.tmpdir=${{ runner.temp }}
+          mvn -Prelease-github --batch-mode release:perform -DdryRun=true -DlocalCheckout=true -DdeployAtEnd=true  -Djava.io.tmpdir=${{ runner.temp }}
+          mvn -Prelease-github clean release:clean
           git clean -f -d -x
 
         env:
@@ -141,7 +141,7 @@ jobs:
           TAG=v"${releaseVersion}"
 
           # Prepare the release with -DpushChanges=false so its all local for now
-          mvn  --batch-mode release:prepare -DreleaseVersion=$RELEASE_VERSION -DdevelopmentVersion=$DEVELOPMENT_VERSION -Dtag=$TAG -DsignTag=true -DpushChanges=false  -Djava.io.tmpdir=${{ runner.temp }}
+          mvn -Prelease-github --batch-mode release:prepare -DreleaseVersion=$RELEASE_VERSION -DdevelopmentVersion=$DEVELOPMENT_VERSION -Dtag=$TAG -DsignTag=true -DpushChanges=false  -Djava.io.tmpdir=${{ runner.temp }}
 
         env:
           NVD_NIST_APIKEY: ${{ secrets.NVD_NIST_APIKEY }}
@@ -157,7 +157,7 @@ jobs:
 
       - name: Perform package publish
         if: ${{ env.DO_DEPLOYMENT == 'true' }}
-        run: mvn  --batch-mode release:perform -DlocalCheckout=true -DdeployAtEnd=true -DsignTag=true  -Djava.io.tmpdir=${{ runner.temp }}
+        run: mvn -Prelease-github --batch-mode release:perform -DlocalCheckout=true -DdeployAtEnd=true -DsignTag=true  -Djava.io.tmpdir=${{ runner.temp }}
         env:
           NVD_NIST_APIKEY: ${{ secrets.NVD_NIST_APIKEY }}
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
