@@ -190,7 +190,7 @@ public class SeleniumHelperTest {
         String filename = "testfile.xlsx";
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME, downloadFilepath);
         // Download a test file from staging.data.qld.gov.au: "testfile.xlsx"
-        holder.getWebDriver().navigate().to("https://staging.data.qld.gov.au/dataset/534a6213-bc2e-4b79-a8da-95438adf47f9/resource/c5098e4c-994d-48d7-a12b-c69c876897cc/download/testfile.xlsx");
+        holder.getWebDriver().navigate().to("https://staging.data.qld.gov.au/dataset/d59e4175-59c6-4453-85aa-36918cef0bbb/resource/b5900695-5e77-4460-85ef-498a41168959/download/testfile.xlsx");
         FluentWait<WebDriver> wait = new FluentWait<>(holder.getWebDriver()).withTimeout(Duration.ofSeconds(10L)).pollingEvery(Duration.ofMillis(100));
         File downloadedFile = new File(downloadFilepath + filename);
         wait.until(x -> downloadedFile.exists());
