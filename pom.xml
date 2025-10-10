@@ -47,8 +47,8 @@
         <owasp.dependency-check-maven.version>12.1.3</owasp.dependency-check-maven.version>
 
         <qa.directory>${project.basedir}/src/qa</qa.directory>
-        <maven-checkstyle-plugin.version>3.4.0</maven-checkstyle-plugin.version>
-        <checkstyle.version>10.17.0</checkstyle.version>
+        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+        <checkstyle.version>3.6.0</checkstyle.version>
         <pmd.version>7.4.0</pmd.version>
         <spotbugs-maven-plugin.version>4.8.6.2</spotbugs-maven-plugin.version>
         <spotbugs.version>4.8.5</spotbugs.version>
