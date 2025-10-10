@@ -187,10 +187,10 @@ public class SeleniumHelperTest {
         Path tempDownloadDirectory = Files.createTempDirectory("tempDownloads");
         tempDownloadDirectory.toFile().deleteOnExit();
         String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
-        String filename = "testfile.xlsx";
+        String filename = "queensland-first-home-owners-grant-by-statistical-area_2018-19-to-31dec18.csv";
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME, downloadFilepath);
         // Download a test file from staging.data.qld.gov.au: "testfile.xlsx"
-        holder.getWebDriver().navigate().to("https://staging.data.qld.gov.au/dataset/d59e4175-59c6-4453-85aa-36918cef0bbb/resource/b5900695-5e77-4460-85ef-498a41168959/download/testfile.xlsx");
+        holder.getWebDriver().navigate().to("https://www.data.qld.gov.au/dataset/c4aa9fdf-0f43-4617-8afa-efaf43d5e533/resource/fd3b2d83-b198-487a-8845-0e47792ce2e5/download/queensland-first-home-owners-grant-by-statistical-area_2018-19-to-31dec18.csv");
         FluentWait<WebDriver> wait = new FluentWait<>(holder.getWebDriver()).withTimeout(Duration.ofSeconds(10L)).pollingEvery(Duration.ofMillis(100));
         File downloadedFile = new File(downloadFilepath + filename);
         wait.until(x -> downloadedFile.exists());
