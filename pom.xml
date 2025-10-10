@@ -2,9 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>au.gov.qld.online</groupId>
+    <groupId>au.gov.qld.services.selenium</groupId>
     <artifactId>selenium-helper</artifactId>
-    <version>4.23.0.004-SNAPSHOT</version>
+    <version>4.36.0.001-SNAPSHOT</version>
+    <name>Selenium Helper for Qld Government</name>
+    <description>Selenium Helper for Qld Government - Test helper for integration testing</description>
 
     <scm>
         <url>https://github.com/qld-gov-au/selenium-helper</url>
@@ -13,21 +15,28 @@
         <tag>HEAD</tag>
     </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/qld-gov-au/selenium-helper</url>
-        </repository>
-    </distributionManagement>
+    <developers>
+        <developer>
+            <id>duttonw</id>
+            <name>William Dutton</name>
+            <email>william.dutton@smartservice.qld.gov.au</email>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License, version 2.1</name>
+            <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <resource.delimiter>@</resource.delimiter>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>4.23.0</selenium.version>
+        <selenium.version>4.36.0</selenium.version>
 
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
@@ -44,7 +53,7 @@
         <spotbugs.version>4.8.5</spotbugs.version>
         <findsecbugs-plugin.version>1.13.0</findsecbugs-plugin.version>
         <sb-contrib.version>7.6.4</sb-contrib.version>
-        <jacoco.version>0.8.12</jacoco.version>
+        <jacoco.version>0.8.13</jacoco.version>
 
         <failsafe.skip>false</failsafe.skip>
         <surefire.skip>false</surefire.skip>
@@ -62,8 +71,7 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>5.9.2</version>
+        <dependency><groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>6.3.2</version>
             <exclusions>
                 <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
                 <exclusion><groupId>com.google.guava</groupId><artifactId>guava</artifactId></exclusion>
@@ -76,19 +84,12 @@
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.26.2</version>
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId><version>1.28.0</version>
             <exclusions>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.15.0</version>
-        </dependency>
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.19.0</version></dependency>
 
 
 
@@ -109,7 +110,7 @@
 
         <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>2.0.13</version></dependency>
 
-        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.6</version></dependency>
+        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.19</version></dependency>
         <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId><version>5.10.3</version></dependency>
         <dependency><scope>test</scope><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId></dependency>
     </dependencies>
@@ -117,7 +118,7 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-enforcer-plugin</artifactId><version>3.5.0</version>
+                <artifactId>maven-enforcer-plugin</artifactId><version>3.6.2</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
@@ -441,6 +442,75 @@
             </repositories>
         </profile>
         <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.9.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <tokenAuth>true</tokenAuth>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.12.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadoc</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <stylesheet>java</stylesheet>
+                            <doclint>none</doclint>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>local-proxy</id>
             <activation>
                 <property>
@@ -474,6 +544,18 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>displayBrowser</id>
+            <properties>
+                <headlessDisabled>-Dheadless.disabled=true</headlessDisabled>
+            </properties>
+        </profile>
+        <profile>
+            <id>doScreenPrints</id>
+            <properties>
+                <headlessDisabled>-DdoScreenPrints=true</headlessDisabled>
+            </properties>
         </profile>
     </profiles>
 </project>
