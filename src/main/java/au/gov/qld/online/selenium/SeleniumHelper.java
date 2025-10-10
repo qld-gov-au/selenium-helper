@@ -125,7 +125,7 @@ public final class SeleniumHelper {
         return getWebDriver(driverType, null);
     }
 
-    @SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
+    //@SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
         //reuse any active session that was released if the download directory has not been set
         for (String key : webDriverListReleased.keySet()) {
