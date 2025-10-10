@@ -28,7 +28,8 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.time.Duration;
@@ -49,7 +50,7 @@ public final class SeleniumHelper {
     //Keep internal tabs on open browsers so when we die unexpectedly we don't leave orphaned browsers running on outside of jvm connection
     private static List<WebDriver> webDriverListAll = new LinkedList<>();
     private static List<DriverService> driverServiceAll = new LinkedList<>();
-    private static File screenprintFolder = new File("target/screenprints/" + new SimpleDateFormat("dd-M-yyyy", Locale.getDefault()).format(new Date()) + "/");
+    private static File screenprintFolder = new File("target/screenprints/" + LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "/");
     private static File screenprintCurrentFolder = new File("target/screenprints/current");
     private static boolean doScreenPrints = false;
     private static boolean headlessEnabled = true;
@@ -58,7 +59,6 @@ public final class SeleniumHelper {
     /**
      * This cleans up anything that used this helper class
      */
-    @SuppressWarnings("PMD.UseTryWithResources") //can't as its a list opened in another place
     private static final Thread CLOSE_THREAD = new Thread() {
         @Override
         public void run() {
@@ -121,11 +121,11 @@ public final class SeleniumHelper {
         return screenprintFolder;
     }
 
-    @SuppressWarnings("PMD.CloseResource") //CloseResource is done on CLOSE_THREAD
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType) {
         return getWebDriver(driverType, null);
     }
 
+    @SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
         //reuse any active session that was released if the download directory has not been set
         for (String key : webDriverListReleased.keySet()) {
@@ -368,7 +368,8 @@ public final class SeleniumHelper {
     }
 
     private static String getScreenPrintFilename(WebDriverHolder webdriver, String testName) {
-        return (shotsTaken++)
+        shotsTaken++;
+        return shotsTaken
             + "-" + testName
             + "-" + webdriver.getBrowserName() + ".png";
     }
