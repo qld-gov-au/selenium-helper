@@ -366,7 +366,6 @@
                     <configuration>
                         <includeTests>false</includeTests>
                         <rulesets>
-                            <!--<ruleset>/rulesets/java/basic.xml</ruleset>-->
                             <ruleset>${qa.directory}/pmd-rules.xml</ruleset>
                         </rulesets>
                         <excludeRoots>
