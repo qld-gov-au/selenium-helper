@@ -168,7 +168,13 @@ public final class SeleniumHelper {
                     if (proxy != null) {
                         chromeOptions.setProxy(proxy);
                     }
-                    webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
+                    try {
+                        webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
+                    } catch(org.openqa.selenium.SessionNotCreatedException snce) {
+                        LOGGER.error("error possibly due to incorrect driver, resetting cache", snce);
+                        resetDriverClientCaches();
+                        webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
+                    }
                     break;
                 case FIREFOX:
                     wdm = WebDriverManager.firefoxdriver();
@@ -190,7 +196,13 @@ public final class SeleniumHelper {
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
                     driverServiceAll.add(geckoDriverService);
-                    webDriver = new FirefoxDriver(geckoDriverService, firefoxOptions);
+                    try {
+                        webDriver = new FirefoxDriver(geckoDriverService, firefoxOptions);
+                    } catch(org.openqa.selenium.SessionNotCreatedException snce) {
+                        LOGGER.error("error possibly due to incorrect driver, resetting cache", snce);
+                        resetDriverClientCaches();
+                        webDriver = new FirefoxDriver(geckoDriverService, firefoxOptions);
+                    }
                     break;
                 case EDGE:
                     if (platform.is(WINDOWS)) {
@@ -212,7 +224,13 @@ public final class SeleniumHelper {
                         }
                         EdgeDriverService edgeDriverService = new EdgeDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(edgeDriverService);
-                        webDriver = new EdgeDriver(edgeDriverService, edgeOptions);
+                        try {
+                            webDriver = new EdgeDriver(edgeDriverService, edgeOptions);
+                        } catch(org.openqa.selenium.SessionNotCreatedException snce) {
+                            LOGGER.error("error possibly due to incorrect driver, resetting cache", snce);
+                            resetDriverClientCaches();
+                            webDriver = new EdgeDriver(edgeDriverService, edgeOptions);
+                        }
                     } else {
                         throw new IllegalStateException("Have to be on windows to run Edge");
                     }
@@ -408,5 +426,14 @@ public final class SeleniumHelper {
     public static void setMaxBrowserUsage(int maxBrowserUsage) {
         SeleniumHelper.maxBrowserUsage = maxBrowserUsage;
     }
+
+    public static void resetDriverClientCaches() {
+        WebDriverManager.chromedriver().clearDriverCache();
+        WebDriverManager.firefoxdriver().clearDriverCache();
+        WebDriverManager.chromiumdriver().clearDriverCache();
+        WebDriverManager.edgedriver().clearDriverCache();
+        WebDriverManager.safaridriver().clearDriverCache();
+    }
+
 
 }
