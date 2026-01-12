@@ -19,7 +19,7 @@ jobs:
 
       - name: Cache NVD Database
         id: cache-nvd
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ~/.m2/repository/org/owasp/dependency-check-data
           key: nvd-cache-${{ runner.os }}-${{ github.run_id }}
@@ -53,7 +53,7 @@ jobs:
           overwrite: true
 
       - name: Cache NVD Database
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         if: ${{ always() }}
         with:
           path: ~/.m2/repository/org/owasp/dependency-check-data
