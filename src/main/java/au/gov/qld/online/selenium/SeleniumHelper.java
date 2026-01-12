@@ -126,6 +126,7 @@ public final class SeleniumHelper {
         return getWebDriver(driverType, null);
     }
 
+    // This is needed locally but unwanted on GitHub Actions...
     //@SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
