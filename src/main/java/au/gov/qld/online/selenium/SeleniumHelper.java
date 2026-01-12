@@ -126,14 +126,12 @@ public final class SeleniumHelper {
         return getWebDriver(driverType, null);
     }
 
-    // This is needed locally but unwanted on GitHub Actions...
-    //@SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
         //reuse any active session that was released if the download directory has not been set
         for (String key : webDriverListReleased.keySet()) {
             WebDriverHolder driver = webDriverListReleased.get(key);
-            if (driverType.equals(driver.getDriverType()) && StringUtils.equals(downloadDirectory, driver.getDownloadDirectory())) {
+            if (driverType == driver.getDriverType() && StringUtils.equals(downloadDirectory, driver.getDownloadDirectory())) {
                 webDriverListReleased.remove(key);
                 return driver;
             }

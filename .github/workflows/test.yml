@@ -5,16 +5,20 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '17', '21' ]
+    name: Java ${{ matrix.Java }} test and verify
     env:
       SEGMENT_DOWNLOAD_TIMEOUT_MINS: '5'
     steps:
       - uses: actions/checkout@v6
 
-      - name: Set up JDK 17
+      - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v5
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '17'
+          java-version: ${{ matrix.java }}
           cache: 'maven'
 
       - name: Cache NVD Database
