@@ -59,6 +59,7 @@ public final class SeleniumHelper {
     /**
      * This cleans up anything that used this helper class
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static final Thread CLOSE_THREAD = new Thread() {
         @Override
         public void run() {
@@ -126,6 +127,7 @@ public final class SeleniumHelper {
     }
 
     //@SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
         //reuse any active session that was released if the download directory has not been set
         for (String key : webDriverListReleased.keySet()) {
@@ -291,6 +293,7 @@ public final class SeleniumHelper {
      * too many times, this may be true for other systems also.
      * @param webDriverHolder
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     public static void close(WebDriverHolder webDriverHolder, boolean clearCookies) {
         if (webDriverHolder == null) {
             return;
