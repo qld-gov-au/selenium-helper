@@ -31,7 +31,6 @@
         </license>
     </licenses>
 
-
     <prerequisites>
         <maven>3.6.5</maven>
     </prerequisites>
@@ -42,22 +41,22 @@
         <resource.delimiter>@</resource.delimiter>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>4.38.0</selenium.version>
+        <selenium.version>4.39.0</selenium.version>
 
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <maven-pmd-plugin.version>3.28.0</maven-pmd-plugin.version>
-        <owasp.dependency-check-maven.version>12.1.9</owasp.dependency-check-maven.version>
+        <owasp.dependency-check-maven.version>12.2.0</owasp.dependency-check-maven.version>
 
         <qa.directory>${project.basedir}/src/qa</qa.directory>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
-        <pmd.version>7.17.0</pmd.version>
-        <spotbugs-maven-plugin.version>4.9.8.1</spotbugs-maven-plugin.version>
+        <pmd.version>7.20.0</pmd.version>
+        <spotbugs-maven-plugin.version>4.9.8.2</spotbugs-maven-plugin.version>
         <spotbugs.version>4.8.5</spotbugs.version>
         <findsecbugs-plugin.version>1.14.0</findsecbugs-plugin.version>
-        <sb-contrib.version>7.7.0</sb-contrib.version>
+        <sb-contrib.version>7.7.2</sb-contrib.version>
         <jacoco.version>0.8.14</jacoco.version>
 
         <failsafe.skip>false</failsafe.skip>
@@ -67,6 +66,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId><version>2.21.0</version></dependency>
             <dependency>
                 <scope>import</scope>
                 <type>pom</type>
@@ -94,7 +94,7 @@
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
             </exclusions>
         </dependency>
-        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.19.0</version></dependency>
+        <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.20.0</version></dependency>
 
 
 
@@ -115,8 +115,8 @@
 
         <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>2.0.17</version></dependency>
 
-        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.21</version></dependency>
-        <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId><version>6.0.1</version></dependency>
+        <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.24</version></dependency>
+        <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId><version>6.0.2</version></dependency>
         <dependency><scope>test</scope><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId></dependency>
     </dependencies>
 
@@ -335,7 +335,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>12.1.2</version>
+                            <version>12.3.1</version> <!-- 13.0.0 is now min jdk21 :'( -->
                         </dependency>
                     </dependencies>
                     <configuration>
@@ -430,7 +430,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -488,7 +488,7 @@
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.9.0</version>
+                        <version>0.10.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
@@ -499,7 +499,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
