@@ -160,7 +160,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriverWithJS);
-        holder.getWebDriver().navigate().to("https://www.bing.com/");
+        holder.getWebDriver().navigate().to("https://www.google.com/");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
@@ -174,7 +174,7 @@ public class SeleniumHelperTest {
         String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX, downloadFilepath);
         holder.getWebDriver().navigate().to("about:preferences");
-        assertThat(holder.getWebDriver().findElement(new By.ByXPath("//*[@id='downloadFolder']")).getAttribute("style")).containsIgnoringCase(downloadFilepath);
+        assertThat(holder.getWebDriver().findElement(new By.ByXPath("//*[@id='downloadFolder']")).getAttribute("style")).withFailMessage("Unable to find downloadFolder:" + holder.getWebDriver().getPageSource()).containsIgnoringCase(downloadFilepath);
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
