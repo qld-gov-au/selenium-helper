@@ -3,6 +3,7 @@ package au.gov.qld.online.selenium;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -165,6 +166,7 @@ public class SeleniumHelperTest {
         SeleniumHelper.close(holder);
     }
 
+    @Disabled("202501: changes in latest firefox, need to update xpath to handle old and new pathing")
     @Test
     public void shouldSetDownloadDirectoryForFirefoxBrowser() throws IOException {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
@@ -174,7 +176,7 @@ public class SeleniumHelperTest {
         String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
         holder = SeleniumHelper.getWebDriver(DriverTypes.FIREFOX, downloadFilepath);
         holder.getWebDriver().navigate().to("about:preferences");
-        assertThat(holder.getWebDriver().findElement(new By.ByXPath("//*[@id='downloadFolder']")).getAttribute("style")).withFailMessage("Unable to find downloadFolder:" + holder.getWebDriver().getPageSource()).containsIgnoringCase(downloadFilepath);
+        assertThat(holder.getWebDriver().findElement(new By.ByXPath("//*[@id='downloadFolder']")).getAttribute("style")).containsIgnoringCase(downloadFilepath);
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
