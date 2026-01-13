@@ -4,7 +4,7 @@
 
     <groupId>au.gov.qld.services.selenium</groupId>
     <artifactId>selenium-helper</artifactId>
-    <version>4.38.0.002-SNAPSHOT</version>
+    <version>4.39.0.001</version>
     <url>https://github.com/qld-gov-au/selenium-helper</url>
     <name>Selenium Helper for Qld Government</name>
     <description>Selenium Helper for Qld Government - Test helper for integration testing</description>
@@ -13,7 +13,7 @@
         <url>https://github.com/qld-gov-au/selenium-helper</url>
         <connection>scm:git:https://github.com/qld-gov-au/selenium-helper.git</connection>
         <developerConnection>scm:git:https://github.com/qld-gov-au/selenium-helper.git</developerConnection>
-        <tag>4.36.0.001</tag>
+        <tag>4.39.0.001</tag>
     </scm>
 
     <developers>
