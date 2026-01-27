@@ -70,7 +70,7 @@
             <dependency>
                 <scope>import</scope>
                 <type>pom</type>
-                <groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.27.6</version>
+                <groupId>org.assertj</groupId><artifactId>assertj-bom</artifactId><version>3.27.7</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
