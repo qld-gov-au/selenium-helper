@@ -223,7 +223,7 @@ jobs:
         env:
           releaseversion: ${{ github.event.inputs.releaseversion }}
 
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-path: '${{ github.workspace }}/staging'
 
