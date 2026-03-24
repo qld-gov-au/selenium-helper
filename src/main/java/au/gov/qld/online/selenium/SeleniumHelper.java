@@ -152,6 +152,7 @@ public final class SeleniumHelper {
                     if (proxy != null) {
                         firefoxOptions.setProxy(proxy);
                     }
+                    firefoxOptions.addPreference("devtools.jsonview.enabled", false);
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
                     driverServiceAll.add(geckoDriverService);
