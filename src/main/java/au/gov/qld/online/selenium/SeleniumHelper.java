@@ -188,6 +188,7 @@ public final class SeleniumHelper {
                         firefoxOptions.addPreference(browserDownloadOption, downloadDirectory);
                         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
                     }
+                    firefoxOptions.addPreference("devtools.jsonview.enabled", false);
                     GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
                     geckoDriverService.start();
                     driverServiceAll.add(geckoDriverService);
