@@ -1,34 +1,33 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="Custom Rules"
-         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns="https://pmd.github.io/pmd-7.0.0/pmd-ruleset"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+         xsi:schemaLocation="https://pmd.github.io/pmd-7.0.0/pmd-ruleset https://pmd.github.io/pmd-7.0.0/pmd-ruleset.xsd">
+
     <description>
-        Custom rules
+        Custom PMD rules for the project — updated for PMD 7.14.
     </description>
-    <!-- FIXME: reduce the amout of supressions and custom configuration here -->
+
+    <!-- Best practices category -->
     <rule ref="category/java/bestpractices.xml">
         <exclude name="ArrayIsStoredDirectly"/>
         <exclude name="GuardLogStatement"/>
         <exclude name="AccessorMethodGeneration"/>
         <exclude name="PreserveStackTrace"/>
-        <exclude name="JUnitTestContainsTooManyAsserts"/>
-        <exclude name="JUnitTestsShouldIncludeAssert"/>
         <exclude name="JUnitUseExpected"/>
-        <exclude name="JUnitAssertionsShouldIncludeMessage"/>
         <exclude name="MethodReturnsInternalArray"/>
     </rule>
 
+    <!-- Error-prone category -->
     <rule ref="category/java/errorprone.xml">
         <exclude name="AvoidFieldNameMatchingMethodName"/>
-        <exclude name="DataflowAnomalyAnalysis"/>
-        <exclude name="BeanMembersShouldSerialize"/>
         <exclude name="UseLocaleWithCaseConversions"/>
         <exclude name="CloseResource"/>
     </rule>
-    <!--<rule ref="category/java/multithreading.xml"></rule>-->
-    <!--<rule ref="category/java/security.xml"></rule>-->
-    <!--<rule ref="category/java/performance.xml"></rule>-->
+
+    <!-- Optional categories -->
+    <!-- <rule ref="category/java/multithreading.xml"/> -->
+    <!-- <rule ref="category/java/security.xml"/> -->
+    <!-- <rule ref="category/java/performance.xml"/> -->
 
 </ruleset>

@@ -28,7 +28,8 @@ public class WebDriverHolder {
     }
 
     public int incrementUsed() {
-        return ++numberUsed;
+        numberUsed++;
+        return numberUsed;
     }
 
     public String getDownloadDirectory() {
