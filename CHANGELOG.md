@@ -2,6 +2,30 @@
 ## [Unreleased]
 
 
+<a name="selenium-helper-4.39.0.002"></a>
+## [selenium-helper-4.39.0.002] - 2026-03-24
+### Pull Requests
+- Merge pull request [#585](https://github.com/qld-gov-au/kiteworks-integration/issues/585) from qld-gov-au/dependabot/github_actions/actions/attest-build-provenance-4
+  - Merge pull request [#587](https://github.com/qld-gov-au/kiteworks-integration/issues/587) from qld-gov-au/dependabot/maven/pmd.version-7.22.0
+  - Merge pull request [#586](https://github.com/qld-gov-au/kiteworks-integration/issues/586) from qld-gov-au/dependabot/github_actions/actions/upload-artifact-7
+  - Merge pull request [#582](https://github.com/qld-gov-au/kiteworks-integration/issues/582) from qld-gov-au/dependabot/maven/org-apache-maven-plugins-27ae35b4de
+  - Merge pull request [#583](https://github.com/qld-gov-au/kiteworks-integration/issues/583) from qld-gov-au/dependabot/maven/selenium-5893b22988
+  - Merge pull request [#581](https://github.com/qld-gov-au/kiteworks-integration/issues/581) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.5.32
+  - Merge pull request [#580](https://github.com/qld-gov-au/kiteworks-integration/issues/580) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.5.31
+  - Merge pull request [#579](https://github.com/qld-gov-au/kiteworks-integration/issues/579) from qld-gov-au/dependabot/maven/junit-jupiter-2c9a51cb82
+  - Merge pull request [#577](https://github.com/qld-gov-au/kiteworks-integration/issues/577) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.5.28
+  - Merge pull request [#575](https://github.com/qld-gov-au/kiteworks-integration/issues/575) from qld-gov-au/dependabot/maven/pmd.version-7.21.0
+  - Merge pull request [#573](https://github.com/qld-gov-au/kiteworks-integration/issues/573) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.5.27
+  - Merge pull request [#572](https://github.com/qld-gov-au/kiteworks-integration/issues/572) from qld-gov-au/dependabot/maven/org-apache-maven-plugins-e466a685ec
+  - Merge pull request [#570](https://github.com/qld-gov-au/kiteworks-integration/issues/570) from qld-gov-au/dependabot/maven/assertj-52da8ede0d
+  - Merge pull request [#571](https://github.com/qld-gov-au/kiteworks-integration/issues/571) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.5.26
+  - Merge pull request [#569](https://github.com/qld-gov-au/kiteworks-integration/issues/569) from qld-gov-au/dependabot/maven/selenium-9df8f00738
+  - Merge pull request [#567](https://github.com/qld-gov-au/kiteworks-integration/issues/567) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.5.25
+  - Merge pull request [#568](https://github.com/qld-gov-au/kiteworks-integration/issues/568) from qld-gov-au/dependabot/maven/com.mebigfatguy.sb-contrib-sb-contrib-7.7.4
+  - Merge pull request [#566](https://github.com/qld-gov-au/kiteworks-integration/issues/566) from qld-gov-au/dependabot/maven/com.mebigfatguy.sb-contrib-sb-contrib-7.7.3
+  - Merge pull request [#564](https://github.com/qld-gov-au/kiteworks-integration/issues/564) from qld-gov-au/update-changelog
+  
+  
 <a name="4.39.0.001"></a>
 ## [4.39.0.001] - 2026-01-13
 ### Pull Requests
@@ -404,7 +428,8 @@
 - Merge pull request [#1](https://github.com/qld-gov-au/kiteworks-integration/issues/1) from qld-gov-au/develop
   
   
-[Unreleased]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.39.0.001...HEAD
+[Unreleased]: https://github.com/qld-gov-au/kiteworks-integration/compare/selenium-helper-4.39.0.002...HEAD
+[selenium-helper-4.39.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.39.0.001...selenium-helper-4.39.0.002
 [4.39.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.38.0.001...4.39.0.001
 [4.38.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.36.0.002...4.38.0.001
 [4.36.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.36.0.001...4.36.0.002
