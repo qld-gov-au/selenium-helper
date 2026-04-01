@@ -39,6 +39,7 @@ import java.time.Duration;
 import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
 
+@SuppressWarnings("PMD.AvoidCatchingGenericException") //generic catch's needed for simpler cleanup
 public final class SeleniumHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
