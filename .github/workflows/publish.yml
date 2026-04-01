@@ -37,7 +37,7 @@ jobs:
       DO_DEPLOYMENT: ${{ github.event_name == 'workflow_dispatch'  && github.event.inputs.publish == 'Yes' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           fetch-depth: 3
@@ -51,7 +51,7 @@ jobs:
 
       - name: Cache NVD Database
         id: cache-nvd
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ~/.m2/repository/org/owasp/dependency-check-data
           key: nvd-cache-${{ runner.os }}-${{ github.run_id }}
@@ -223,12 +223,12 @@ jobs:
         env:
           releaseversion: ${{ github.event.inputs.releaseversion }}
 
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-path: '${{ github.workspace }}/staging'
 
       - name: Cache NVD Database
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         if: ${{ always() }}
         with:
           path: ~/.m2/repository/org/owasp/dependency-check-data
