@@ -39,11 +39,10 @@ import java.time.Duration;
 import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-@SuppressWarnings(SeleniumHelper.PMD_AVOID_CATCHING_GENERIC_EXCEPTION) //generic catch's needed for simpler cleanup
+@SuppressWarnings("PMD.AvoidCatchingGenericException") //generic catch's needed for simpler cleanup
 public final class SeleniumHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    public static final String PMD_AVOID_CATCHING_GENERIC_EXCEPTION = "PMD.AvoidCatchingGenericException";
 
     private static int maxBrowserUsage = 10;
 
@@ -63,7 +62,6 @@ public final class SeleniumHelper {
     /**
      * This cleans up anything that used this helper class
      */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static final Thread CLOSE_THREAD = new Thread() {
         @Override
         public void run() {
@@ -221,7 +219,7 @@ public final class SeleniumHelper {
         return getWebDriver(driverType, null);
     }
 
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    @SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
         //reuse any active session that was released if the download directory has not been set
         for (String key : webDriverListReleased.keySet()) {
@@ -346,7 +344,7 @@ public final class SeleniumHelper {
                     throw new IllegalArgumentException("Unknown DriverTypes");
             }
 
-            if (!DriverTypes.SAFARI.equals(driverType)) {
+            if (!(DriverTypes.SAFARI == driverType)) {
                 webDriver.manage().deleteAllCookies();
             }
             webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(360));
@@ -399,7 +397,7 @@ public final class SeleniumHelper {
 
         WebDriver driver = webDriverHolder.getWebDriver();
         if (clearCookies) {
-            if (DriverTypes.SAFARI.equals(webDriverHolder.getDriverType())) {
+            if (DriverTypes.SAFARI == webDriverHolder.getDriverType()) {
                 LOGGER.error("SAFARI does not allow cookie delete :'( normally throws org.openqa.selenium.NoSuchSessionException");
             } else {
                 driver.manage().deleteAllCookies();
