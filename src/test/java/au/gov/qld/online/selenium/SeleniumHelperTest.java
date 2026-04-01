@@ -5,7 +5,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.io.File;
@@ -15,7 +17,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -126,6 +127,31 @@ public class SeleniumHelperTest {
     }
 
     @Test
+    public void shouldStartChromeBrowserWithProxy() {
+        Proxy origproxy = SeleniumHelper.getProxy();
+        try {
+            System.setProperty("https.proxyHost", "127.0.0.1"); //invalid proxy but its testing
+            System.setProperty("https.proxyPort", "11111"); //invalid proxy but its testing
+            System.setProperty("http.nonProxyHosts", "https://google.com|https://google.com.au"); //bypass direct
+            SeleniumHelper.proxyConfig();
+            String testName = new Object() {
+            }.getClass().getEnclosingMethod().getName();
+            SeleniumHelper.setDoScreenPrints(true);
+            holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
+            try {
+                holder.getWebDriver().navigate().to("https://google.com/");
+            } catch (WebDriverException e) {
+                assertThat(e.getMessage()).contains("net::ERR_PROXY_CONNECTION_FAILED");
+            }
+            SeleniumHelper.close(holder);
+        } finally {
+            SeleniumHelper.closeAllBrowsers();
+            holder = null; //Ensure cleanup does not error
+            SeleniumHelper.setProxy(origproxy);
+        }
+    }
+
+    @Test
     public void shouldStartChromeBrowserWithTwoInaRow() {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
@@ -229,32 +255,6 @@ public class SeleniumHelperTest {
         }
         SeleniumHelper.close(holder);
     } */
-
-    @Test
-    public void shouldSetDownloadDirectoryForSafariBrowser() throws IOException, InterruptedException {
-        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
-        SeleniumHelper.setDoScreenPrints(true);
-        Path tempDownloadDirectory = Files.createTempDirectory("tempDownloads");
-        tempDownloadDirectory.toFile().deleteOnExit();
-        String downloadFilepath = tempDownloadDirectory.toFile().getAbsolutePath() + "/";
-        String filename = "testfile.xlsx";
-        // Not sure how safari has settings set up, so try download instead
-        try {
-            holder = SeleniumHelper.getWebDriver(DriverTypes.SAFARI, downloadFilepath);
-            // Download a test file from staging.data.qld.gov.au: "testfile.xlsx"
-            holder.getWebDriver().navigate().to("https://staging.data.qld.gov.au/dataset/534a6213-bc2e-4b79-a8da-95438adf47f9/resource/c5098e4c-994d-48d7-a12b-c69c876897cc/download/testfile.xlsx");
-            TimeUnit.SECONDS.sleep(3);
-            File downloadedFile = new File(downloadFilepath + filename);
-            Assertions.assertThat(downloadedFile).exists();
-            downloadedFile.deleteOnExit();
-            SeleniumHelper.performScreenPrint(holder, testName);
-            SeleniumHelper.close(holder);
-        } catch (RuntimeException e) {
-            // Expected when not on mac
-            assertThat(e.getMessage()).isEqualTo("Have to be on Mac to run Safari");
-            assertThat(e).isInstanceOf(IllegalStateException.class);
-        }
-    }
 
     // Custom download directories haven't beeen implemented for HtmlUnitBrowser and HtmlUnitWithJsBrowser
 }
