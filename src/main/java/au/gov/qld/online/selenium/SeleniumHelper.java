@@ -3,6 +3,7 @@ package au.gov.qld.online.selenium;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.htmlunit.BrowserVersion;
 import org.htmlunit.WebClient;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -37,6 +39,7 @@ import java.time.Duration;
 import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
 
+@SuppressWarnings("PMD.AvoidCatchingGenericException") //generic catch's needed for simpler cleanup
 public final class SeleniumHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -59,20 +62,10 @@ public final class SeleniumHelper {
     /**
      * This cleans up anything that used this helper class
      */
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     private static final Thread CLOSE_THREAD = new Thread() {
         @Override
         public void run() {
-            for (WebDriver driver : webDriverListAll) {
-                if (driver != null) {
-                    try {
-                        driver.close();
-                        driver.quit();
-                    } catch (Exception e) {
-                        LOGGER.error("exception on close", e);
-                    }
-                }
-            }
+            closeAllBrowsers();
             for (DriverService service : driverServiceAll) {
                 if (service != null) {
                     try (service) {
@@ -85,8 +78,29 @@ public final class SeleniumHelper {
         }
     };
 
+    public static void closeAllBrowsers() {
+        Iterator<WebDriver> iterator = webDriverListAll.iterator();
+        while (iterator.hasNext()) {
+            WebDriver driver = iterator.next();
+            iterator.remove();
+            if (driver != null) {
+                try {
+                    driver.close();
+                    driver.quit();
+                } catch (Exception e) {
+                    LOGGER.error("exception on close", e);
+                }
+            }
+        }
+        webDriverListReleased.clear();
+    }
+
     static {
         if (StringUtils.isNotBlank(System.getProperty("headless.disabled"))) {
+            LOGGER.debug("headless disabled");
+            headlessEnabled = false;
+        }
+        if (StringUtils.isNotBlank(getEnvIgnoreCase("headless_disabled"))) {
             LOGGER.debug("headless disabled");
             headlessEnabled = false;
         }
@@ -94,13 +108,13 @@ public final class SeleniumHelper {
             LOGGER.debug("screenprints enabled");
             doScreenPrints = true;
         }
-        if (StringUtils.isNotBlank(System.getProperty("http_proxy"))) {
-            LOGGER.debug("proxy enabled");
-            proxy = new Proxy();
-            proxy.setProxyType(Proxy.ProxyType.MANUAL);
-            proxy.setHttpProxy(System.getProperty("http_proxy", "").replaceAll("http.*?://", ""));
-            proxy.setSslProxy(System.getProperty("https_proxy", "").replaceAll("http.*?://", ""));
+        if (StringUtils.isNotBlank(getEnvIgnoreCase("doScreenPrints"))) {
+            LOGGER.debug("screenprints enabled");
+            doScreenPrints = true;
         }
+
+        proxyConfig();
+
         Runtime.getRuntime().addShutdownHook(CLOSE_THREAD);
         try {
             FileUtils.forceMkdir(screenprintFolder);
@@ -118,6 +132,85 @@ public final class SeleniumHelper {
         //utility class
     }
 
+    private static String getEnvIgnoreCase(String key) {
+        for (Map.Entry<String, String> k : System.getenv().entrySet()) {
+            if (k.getKey().equalsIgnoreCase(key)) {
+                return k.getValue();
+            }
+        }
+        return null;
+    }
+
+    public static void setProxy(Proxy proxyReplace) {
+        proxy = proxyReplace;
+    }
+
+    public static Proxy getProxy() {
+        return proxy;
+    }
+
+    public static void proxyConfig() {
+        proxy = new Proxy();
+        proxy.setProxyType(Proxy.ProxyType.DIRECT);
+        String httpsProxy = getEnvIgnoreCase("https_proxy");
+        String httpProxy = getEnvIgnoreCase("http_proxy");
+        String nonProxyHosts = getEnvIgnoreCase("http_nonProxyHosts");
+
+        if (httpProxy != null && !httpProxy.isEmpty()) {
+            URI uriHttp = URI.create(httpProxy);
+            if (uriHttp.getHost() != null) {
+                System.setProperty("http.proxyHost", uriHttp.getHost());
+            }
+            if (uriHttp.getPort() != -1) {
+                System.setProperty("http.proxyPort", String.valueOf(uriHttp.getPort()));
+            }
+        }
+
+        if (httpsProxy != null && !httpsProxy.isEmpty()) {
+            URI uriHttps = URI.create(httpsProxy);
+
+            if (uriHttps.getHost() != null) {
+                System.setProperty("https.proxyHost", uriHttps.getHost());
+            }
+            if (uriHttps.getPort() != -1) {
+                System.setProperty("https.proxyPort", String.valueOf(uriHttps.getPort()));
+            }
+        }
+
+        if (nonProxyHosts != null && !nonProxyHosts.isEmpty()) {
+            //Ensure java proxy is pipe delimited.
+            System.setProperty("http.nonProxyHosts", nonProxyHosts.replaceAll(",", "|"));
+        }
+
+        String systemHttpsProxyHost = System.getProperty("https.proxyHost");
+        String systemHttpProxyHost = System.getProperty("http.proxyHost");
+        String systemNonProxyHosts = System.getProperty("http.nonProxyHosts");
+        if ((systemHttpsProxyHost != null && !systemHttpsProxyHost.isEmpty())
+                || (systemHttpProxyHost != null && !systemHttpProxyHost.isEmpty())
+        ) {
+            try {
+                proxy = new Proxy();
+                proxy.setProxyType(Proxy.ProxyType.MANUAL);
+                if (systemHttpProxyHost != null && !systemHttpProxyHost.isEmpty()) {
+                    proxy.setHttpProxy(systemHttpProxyHost + ":" + System.getProperty("http.proxyPort", "80"));
+                }
+                if (systemHttpsProxyHost != null && !systemHttpsProxyHost.isEmpty()) {
+                    proxy.setSslProxy(systemHttpsProxyHost + ":" + System.getProperty("https.proxyPort", "443"));
+                }
+
+                if (systemNonProxyHosts != null && !systemNonProxyHosts.isEmpty()) {
+                    //Java default http.nonProxyHosts: A list of hosts that should be reached directly, bypassing the proxy.
+                    // This is a list of patterns separated by |. The patterns may start or end with a * for wildcards.
+                    // Any host that matches one of these patterns is reached through a direct connection instead of through a proxy.
+                    // But Selenium wants it in comma delimited form.
+                    proxy.setNoProxy(systemNonProxyHosts.replaceAll("\\|", ","));
+                }
+            } catch (Exception e) {
+                LOGGER.error("could not create proxy", e);
+            }
+        }
+    }
+
     public static File getDestinationFolder() {
         return screenprintFolder;
     }
@@ -126,7 +219,7 @@ public final class SeleniumHelper {
         return getWebDriver(driverType, null);
     }
 
-    @SuppressWarnings("PMD.AvoidCatchingGenericException")
+    //@SuppressWarnings("PMD.ExhaustiveSwitchHasDefault")
     public static synchronized WebDriverHolder getWebDriver(DriverTypes driverType, String downloadDirectory) {
         //reuse any active session that was released if the download directory has not been set
         for (String key : webDriverListReleased.keySet()) {
@@ -226,13 +319,13 @@ public final class SeleniumHelper {
                         DesiredCapabilities safariCapabilities = new DesiredCapabilities();
                         final SafariOptions safariOptions = new SafariOptions();
                         safariOptions.merge(safariCapabilities);
-                        if (proxy != null) {
+                        if (proxy != null && proxy.getProxyType() != Proxy.ProxyType.DIRECT) {
                             safariOptions.setProxy(proxy);
                             wdm.config().setProxy(proxy.getHttpProxy());
                         }
                         wdm.setup();
                         if (downloadDirectory != null) {
-                            safariOptions.setCapability(browserDownloadOption, downloadDirectory);
+                            LOGGER.error("browser.download.dir - it is no longer supported in W3C/Safari combo, downloads will only go to user.home Downloads folder.");
                         }
                         SafariDriverService safariDriverService = new SafariDriverService.Builder().usingAnyFreePort().build();
                         driverServiceAll.add(safariDriverService);
@@ -251,7 +344,9 @@ public final class SeleniumHelper {
                     throw new IllegalArgumentException("Unknown DriverTypes");
             }
 
-            webDriver.manage().deleteAllCookies();
+            if (!(DriverTypes.SAFARI == driverType)) {
+                webDriver.manage().deleteAllCookies();
+            }
             webDriver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(360));
             webDriver.manage().window().maximize();
             Dimension maximizeDim = webDriver.manage().window().getSize();
@@ -272,7 +367,8 @@ public final class SeleniumHelper {
 
     private static HtmlUnitDriver createHtmlUnitDriver(final boolean enableJavascript) {
         HtmlUnitDriver driver;
-        driver = new HtmlUnitDriver() {
+        //Mimic google chrome latest so we have esm6 support
+        driver = new HtmlUnitDriver(BrowserVersion.CHROME) {
             @Override
             protected WebClient modifyWebClient(WebClient client) {
                 client.getOptions().setThrowExceptionOnScriptError(false);
@@ -301,7 +397,11 @@ public final class SeleniumHelper {
 
         WebDriver driver = webDriverHolder.getWebDriver();
         if (clearCookies) {
-            driver.manage().deleteAllCookies();
+            if (DriverTypes.SAFARI == webDriverHolder.getDriverType()) {
+                LOGGER.error("SAFARI does not allow cookie delete :'( normally throws org.openqa.selenium.NoSuchSessionException");
+            } else {
+                driver.manage().deleteAllCookies();
+            }
         }
 
         driver.navigate().to("about:blank");
