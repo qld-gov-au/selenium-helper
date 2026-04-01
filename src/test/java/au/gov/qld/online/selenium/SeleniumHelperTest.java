@@ -125,31 +125,33 @@ public class SeleniumHelperTest {
         SeleniumHelper.close(holder);
     }
 
-//    @Test
-//    public void shouldStartChromeBrowserWithProxy() {
-//        Proxy origproxy = SeleniumHelper.getProxy();
-//        try {
-//            System.setProperty("https.proxyHost", "127.0.0.1"); //invalid proxy but its testing
-//            System.setProperty("https.proxyPort", "11111"); //invalid proxy but its testing
-//            System.setProperty("http.nonProxyHosts", "https://google.com|https://google.com.au"); //bypass direct
-//            SeleniumHelper.proxyConfig();
-//            String testName = new Object() {
-//            }.getClass().getEnclosingMethod().getName();
-//            SeleniumHelper.setDoScreenPrints(true);
-//            try {
-//            holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
-//
-//                holder.getWebDriver().navigate().to("https://google.com/");
-//            } catch (WebDriverException e) {
-//                //Pass this is different between mac/linux/etc
-//            }
-//            SeleniumHelper.close(holder);
-//        } finally {
-//            SeleniumHelper.closeAllBrowsers();
-//            holder = null; //Ensure cleanup does not error
-//            SeleniumHelper.setProxy(origproxy);
-//        }
-//    }
+    /**
+    @Test
+    public void shouldStartChromeBrowserWithProxy() {
+        Proxy origproxy = SeleniumHelper.getProxy();
+        try {
+            System.setProperty("https.proxyHost", "127.0.0.1"); //invalid proxy but its testing
+            System.setProperty("https.proxyPort", "11111"); //invalid proxy but its testing
+            System.setProperty("http.nonProxyHosts", "https://google.com|https://google.com.au"); //bypass direct
+            SeleniumHelper.proxyConfig();
+            String testName = new Object() {
+            }.getClass().getEnclosingMethod().getName();
+            SeleniumHelper.setDoScreenPrints(true);
+            try {
+            holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME);
+
+                holder.getWebDriver().navigate().to("https://google.com/");
+            } catch (WebDriverException e) {
+                //Pass this is different between mac/linux/etc
+            }
+            SeleniumHelper.close(holder);
+        } finally {
+            SeleniumHelper.closeAllBrowsers();
+            holder = null; //Ensure cleanup does not error
+            SeleniumHelper.setProxy(origproxy);
+        }
+    }
+     **/
 
     @Test
     public void shouldStartChromeBrowserWithTwoInaRow() {
