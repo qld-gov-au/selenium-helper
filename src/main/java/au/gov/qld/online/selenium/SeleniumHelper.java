@@ -39,10 +39,11 @@ import java.time.Duration;
 import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-@SuppressWarnings("PMD.AvoidCatchingGenericException") //generic catch's needed for simpler cleanup
+@SuppressWarnings(SeleniumHelper.PMD_AVOID_CATCHING_GENERIC_EXCEPTION) //generic catch's needed for simpler cleanup
 public final class SeleniumHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    public static final String PMD_AVOID_CATCHING_GENERIC_EXCEPTION = "PMD.AvoidCatchingGenericException";
 
     private static int maxBrowserUsage = 10;
 
