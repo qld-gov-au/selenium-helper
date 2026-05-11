@@ -616,6 +616,7 @@
                             <nvdApiKey>${env.NVD_NIST_APIKEY}</nvdApiKey>
                             <nvdApiKey>${env.OSS_INDEX_USERNAME}</nvdApiKey>
                             <nvdApiKey>${env.OSS_INDEX_PASSWORD}</nvdApiKey>
+                            <ossIndexAnalyzerEnabled>false</ossIndexAnalyzerEnabled><!-- no more free lunch -->
                             <bundleAuditAnalyzerEnabled>false</bundleAuditAnalyzerEnabled>
                         </configuration>
                         <executions>
