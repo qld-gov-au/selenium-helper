@@ -4,7 +4,7 @@
 
     <groupId>au.gov.qld.services.selenium</groupId>
     <artifactId>selenium-helper</artifactId>
-    <version>4.39.0.003-SNAPSHOT</version>
+    <version>4.43.0.002-SNAPSHOT</version>
     <url>https://github.com/qld-gov-au/selenium-helper</url>
     <name>Selenium Helper for Qld Government</name>
     <description>Selenium Helper for Qld Government - Test helper for integration testing</description>
@@ -13,7 +13,6 @@
         <url>https://github.com/qld-gov-au/selenium-helper</url>
         <connection>scm:git:https://github.com/qld-gov-au/selenium-helper.git</connection>
         <developerConnection>scm:git:https://github.com/qld-gov-au/selenium-helper.git</developerConnection>
-        <tag>4.36.0.001</tag>
     </scm>
 
     <developers>
@@ -51,7 +50,6 @@
         <owasp.dependency-check-maven.version>12.2.2</owasp.dependency-check-maven.version>
 
         <qa.directory>${project.basedir}/src/qa</qa.directory>
-        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <pmd.version>7.24.0</pmd.version>
         <spotbugs-maven-plugin.version>4.9.8.3</spotbugs-maven-plugin.version>
         <spotbugs.version>4.8.5</spotbugs.version>
@@ -76,6 +74,7 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency><groupId>commons-io</groupId><artifactId>commons-io</artifactId><version>2.21.0</version></dependency>
         <dependency><groupId>io.github.bonigarcia</groupId><artifactId>webdrivermanager</artifactId><version>6.3.4</version>
             <exclusions>
                 <exclusion><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId></exclusion>
@@ -92,6 +91,7 @@
         <dependency><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId><version>1.28.0</version>
             <exclusions>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
+                <exclusion><groupId>commons-io</groupId><artifactId>commons-io</artifactId></exclusion>
             </exclusions>
         </dependency>
         <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.20.0</version></dependency>
@@ -110,6 +110,7 @@
                 <exclusion><groupId>commons-codec</groupId><artifactId>commons-codec</artifactId></exclusion>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId></exclusion>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
+                <exclusion><groupId>commons-io</groupId><artifactId>commons-io</artifactId></exclusion>
             </exclusions>
         </dependency>
 
@@ -147,15 +148,6 @@
             </plugin>
 
             <plugin><groupId>org.jacoco</groupId><artifactId>jacoco-maven-plugin</artifactId><version>${jacoco.version}</version></plugin>
-
-            <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId><version>2.10</version>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>false</downloadJavadocs>
-                    <wtpversion>2.0</wtpversion>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>pl.project13.maven</groupId><artifactId>git-commit-id-plugin</artifactId><version>${git-commit-id-plugin.version}</version>
@@ -201,8 +193,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin><artifactId>maven-checkstyle-plugin</artifactId><version>${maven-checkstyle-plugin.version}</version></plugin>
 
             <plugin><artifactId>maven-pmd-plugin</artifactId><version>${maven-pmd-plugin.version}</version></plugin>
 
@@ -335,7 +325,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>13.4.2</version> <!-- 13.0.0 is now min jdk21 :'( -->
+                            <version>12.3.1</version> <!-- 13.0.0 is now min jdk21 :'( -->
                         </dependency>
                     </dependencies>
                     <configuration>
