@@ -7,7 +7,7 @@ This library will load the correct Driver for your browser you choose and ensure
 ### Main Entry point
 `SeleniumHelper.getWebDriverHolder()`
 
-Environment Args that you can use:
+System Args that you can use:
 * `headless.disabled`
 
   If set, then headless mode for browsers is turned off (that is, the browser windows will open).
@@ -20,6 +20,43 @@ Environment Args that you can use:
 * `http.proxyHost` and `https.proxyHost`
 
   These variables are passed through to the browser.
+
+Environment Args that you can use:
+
+* `headless_disabled`
+
+  If set, then headless mode for browsers is turned off (that is, the browser windows will open).
+
+* `doScreenPrints`
+
+  If set, then screenshots will be taken if `performScreenPrint` is called. Is used with
+  ```performScreenPrint(WebDriverHolder webDriverHolder, String testName)```.
+
+
+### Proxy configuration
+
+You can set three system properties to configure the proxy settings that are used by the HTTP protocol handler:
+
+``http.proxyHost``: The host name of the proxy server.
+
+``http.proxyPort``: The port number (the default is 80).
+
+``http.nonProxyHosts``: A list of hosts that should be reached directly, bypassing the proxy. This is a list of patterns separated by |. The patterns may start or end with a * for wildcards. Any host that matches one of these patterns is reached through a direct connection instead of through a proxy.
+
+For HTTPS, the following properties are available:
+
+``https.proxyHost``: The host name of the proxy server.
+
+``https.proxyPort``: The port number, the default value being 80.
+
+Also available via Environment Properties:
+
+``http_proxy``: The url for the https proxy, it will be split during ingestion and set to system properties
+
+``https_proxy``: The url for the https proxy, it will be split during ingestion and set to system properties
+
+``http_nonProxyHosts``: This is a list of patterns separated by |.
+
 
 ### Missing Firefox Profile
 
