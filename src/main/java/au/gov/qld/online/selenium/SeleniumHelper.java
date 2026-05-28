@@ -337,8 +337,14 @@ public final class SeleniumHelper {
                 case HtmlUnitDriverWithJS:
                     webDriver = createHtmlUnitDriver(true);
                     break;
+                case HtmlUnitDriverWithJSNoCSS:
+                    webDriver = createHtmlUnitDriver(true, false);
+                    break;
                 case HtmlUnitDriver:
                     webDriver = createHtmlUnitDriver(false);
+                    break;
+                case HtmlUnitDriverNoCSS:
+                    webDriver = createHtmlUnitDriver(false, false);
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown DriverTypes");
@@ -366,13 +372,18 @@ public final class SeleniumHelper {
     }
 
     private static HtmlUnitDriver createHtmlUnitDriver(final boolean enableJavascript) {
+        return createHtmlUnitDriver(enableJavascript, true);
+    }
+
+    private static HtmlUnitDriver createHtmlUnitDriver(final boolean enableJavascript, final boolean enableCSS) {
         HtmlUnitDriver driver;
-        //Mimic google chrome latest so we have esm6 support
+        //Mimic google chrome latest but sadly its still rhino and can't do 'class' js and advance css.
         driver = new HtmlUnitDriver(BrowserVersion.CHROME) {
             @Override
             protected WebClient modifyWebClient(WebClient client) {
                 client.getOptions().setThrowExceptionOnScriptError(false);
                 client.getOptions().setJavaScriptEnabled(enableJavascript);
+                client.getOptions().setCssEnabled(enableCSS);
                 return client;
             }
         };

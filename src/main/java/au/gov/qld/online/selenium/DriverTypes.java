@@ -6,5 +6,7 @@ public enum DriverTypes {
     EDGE,
     SAFARI,
     HtmlUnitDriver,
-    HtmlUnitDriverWithJS
+    HtmlUnitDriverNoCSS,
+    HtmlUnitDriverWithJS,
+    HtmlUnitDriverWithJSNoCSS
 }
