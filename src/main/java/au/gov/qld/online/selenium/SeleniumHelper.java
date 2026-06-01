@@ -3,6 +3,7 @@ package au.gov.qld.online.selenium;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.htmlunit.BrowserVersion;
 import org.htmlunit.WebClient;
 import org.openqa.selenium.*;
@@ -412,6 +413,15 @@ public final class SeleniumHelper {
                 LOGGER.error("SAFARI does not allow cookie delete :'( normally throws org.openqa.selenium.NoSuchSessionException");
             } else {
                 driver.manage().deleteAllCookies();
+            }
+
+            if (!Strings.CI.equalsAny(webDriverHolder.getDriverType().toString(), "HtmlUnitDriver", "HtmlUnitDriverNoCSS")) {
+                try {
+                    ((JavascriptExecutor) webDriverHolder.getWebDriver()).executeScript("window.sessionStorage.clear()");
+                    ((JavascriptExecutor) webDriverHolder.getWebDriver()).executeScript("window.localStorage.clear()");
+                } catch (UnsupportedOperationException | WebDriverException e) {
+                    LOGGER.error("No Javascript executor available, ignoring session/local storage clearing");
+                }
             }
         }
 
