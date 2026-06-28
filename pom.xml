@@ -4,7 +4,7 @@
 
     <groupId>au.gov.qld.services.selenium</groupId>
     <artifactId>selenium-helper</artifactId>
-    <version>4.43.0.005-SNAPSHOT</version>
+    <version>4.45.0.001-SNAPSHOT</version>
     <url>https://github.com/qld-gov-au/selenium-helper</url>
     <name>Selenium Helper for Qld Government</name>
     <description>Selenium Helper for Qld Government - Test helper for integration testing</description>
@@ -13,7 +13,6 @@
         <url>https://github.com/qld-gov-au/selenium-helper</url>
         <connection>scm:git:https://github.com/qld-gov-au/selenium-helper.git</connection>
         <developerConnection>scm:git:https://github.com/qld-gov-au/selenium-helper.git</developerConnection>
-      <tag>4.43.0.004</tag>
   </scm>
 
     <developers>
@@ -199,6 +198,14 @@
 
             <plugin><groupId>com.github.spotbugs</groupId><artifactId>spotbugs-maven-plugin</artifactId></plugin>
 
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <goals>deploy</goals>
+                    <!-- This changes the tag from artifactId-version to just version -->
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
         </plugins>
 
         <pluginManagement>
