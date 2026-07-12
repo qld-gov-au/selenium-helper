@@ -334,7 +334,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>13.7.0</version> <!-- 13.0.0 is now min jdk21 :'( -->
+                            <version>13.8.0</version> <!-- 13.0.0 is now min jdk21 :'( -->
                         </dependency>
                     </dependencies>
                     <configuration>
