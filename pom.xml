@@ -4,7 +4,7 @@
 
     <groupId>au.gov.qld.services.selenium</groupId>
     <artifactId>selenium-helper</artifactId>
-    <version>4.45.0.002-SNAPSHOT</version>
+    <version>4.46.0.001-SNAPSHOT</version>
     <url>https://github.com/qld-gov-au/selenium-helper</url>
     <name>Selenium Helper for Qld Government</name>
     <description>Selenium Helper for Qld Government - Test helper for integration testing</description>
@@ -38,8 +38,10 @@
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
-        <resource.delimiter>@</resource.delimiter>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
+        <resource.delimiter>@</resource.delimiter>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium.version>4.46.0</selenium.version>
 
@@ -96,9 +98,6 @@
             </exclusions>
         </dependency>
         <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.20.0</version></dependency>
-
-
-
         <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId><version>${selenium.version}</version>
             <exclusions>
                 <exclusion><groupId>commons-codec</groupId><artifactId>commons-codec</artifactId></exclusion>
@@ -114,9 +113,7 @@
                 <exclusion><groupId>commons-io</groupId><artifactId>commons-io</artifactId></exclusion>
             </exclusions>
         </dependency>
-
         <dependency><groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>2.0.18</version></dependency>
-
         <dependency><scope>test</scope><groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.38</version></dependency>
         <dependency><scope>test</scope><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-api</artifactId><version>6.1.2</version></dependency>
         <dependency><scope>test</scope><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId></dependency>
@@ -143,9 +140,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId><version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <release>${java.version}</release>
-                </configuration>
             </plugin>
 
             <plugin><groupId>org.jacoco</groupId><artifactId>jacoco-maven-plugin</artifactId><version>${jacoco.version}</version></plugin>
@@ -334,7 +328,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>13.8.0</version> <!-- 13.0.0 is now min jdk21 :'( -->
+                            <version>13.8.0</version>
                         </dependency>
                     </dependencies>
                     <configuration>
