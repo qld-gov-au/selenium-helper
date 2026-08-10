@@ -37,13 +37,13 @@ jobs:
       DO_DEPLOYMENT: ${{ github.event_name == 'workflow_dispatch'  && github.event.inputs.publish == 'Yes' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
         with:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           fetch-depth: 3
 
       - name: Set up JDK
-        uses: actions/setup-java@v5.7.0
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 #v5.7.0
         with:
           distribution: 'zulu'
           java-version: '21'
@@ -51,7 +51,7 @@ jobs:
 
       - name: Cache NVD Database
         id: cache-nvd
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 #v6.1.0
         with:
           path: ~/.m2/repository/org/owasp/dependency-check-data
           key: nvd-cache-${{ runner.os }}-${{ github.run_id }}
@@ -223,12 +223,12 @@ jobs:
         env:
           releaseversion: ${{ github.event.inputs.releaseversion }}
 
-      - uses: actions/attest-build-provenance@v4
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 #v4.2.2
         with:
           subject-path: '${{ github.workspace }}/staging'
 
       - name: Cache NVD Database
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 #v6.1.0
         if: ${{ always() }}
         with:
           path: ~/.m2/repository/org/owasp/dependency-check-data
@@ -243,7 +243,7 @@ jobs:
 
 
 #      - name: Set up Java for publishing to Maven Central Repository
-#        uses: actions/setup-java@v5.7.0
+#        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 #v5.7.0
 #        with:
 #          java-version: '11'
 #          distribution: 'temurin'
