@@ -2,6 +2,15 @@
 ## [Unreleased]
 
 
+<a name="v4.47.0.001"></a>
+## [v4.47.0.001] - 2026-08-20
+### Pull Requests
+- Merge pull request [#649](https://github.com/qld-gov-au/kiteworks-integration/issues/649) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.6.3
+  - Merge pull request [#648](https://github.com/qld-gov-au/kiteworks-integration/issues/648) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.6.2
+  - Merge pull request [#645](https://github.com/qld-gov-au/kiteworks-integration/issues/645) from qld-gov-au/dependabot/maven/junit-jupiter-038e2d5db8
+  - Merge pull request [#646](https://github.com/qld-gov-au/kiteworks-integration/issues/646) from qld-gov-au/update-changelog
+  
+  
 <a name="v4.46.0.002"></a>
 ## [v4.46.0.002] - 2026-08-11
 ### Pull Requests
@@ -152,11 +161,11 @@
   - Merge pull request [#540](https://github.com/qld-gov-au/kiteworks-integration/issues/540) from qld-gov-au/dependabot/maven/com.puppycrawl.tools-checkstyle-12.1.2
   
   
-<a name="4.38.0.001"></a>
-## [4.38.0.001] - 2025-11-11
-
 <a name="v4.38.0.001"></a>
 ## [v4.38.0.001] - 2025-11-11
+
+<a name="4.38.0.001"></a>
+## [4.38.0.001] - 2025-11-11
 ### Pull Requests
 - Merge pull request [#539](https://github.com/qld-gov-au/kiteworks-integration/issues/539) from qld-gov-au/dependabot/maven/ch.qos.logback-logback-classic-1.5.21
   - Merge pull request [#537](https://github.com/qld-gov-au/kiteworks-integration/issues/537) from qld-gov-au/dependabot/maven/selenium-940b388a42
@@ -350,11 +359,11 @@
   - Merge pull request [#287](https://github.com/qld-gov-au/kiteworks-integration/issues/287) from qld-gov-au/dependabot/maven/pmd.version-6.45.0
   
   
-<a name="v1.0.7"></a>
-## [v1.0.7] - 2022-04-29
-
 <a name="1.0.7"></a>
 ## [1.0.7] - 2022-04-29
+
+<a name="v1.0.7"></a>
+## [v1.0.7] - 2022-04-29
 ### Pull Requests
 - Merge pull request [#285](https://github.com/qld-gov-au/kiteworks-integration/issues/285) from qld-gov-au/snyk-fix-aa3921a23ce20649a4e3a49f9facf73d
   - Merge pull request [#269](https://github.com/qld-gov-au/kiteworks-integration/issues/269) from qld-gov-au/dependabot/maven/pmd.version-6.44.0
@@ -585,7 +594,8 @@
 - Merge pull request [#1](https://github.com/qld-gov-au/kiteworks-integration/issues/1) from qld-gov-au/develop
   
   
-[Unreleased]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.46.0.002...HEAD
+[Unreleased]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.47.0.001...HEAD
+[v4.47.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.46.0.002...v4.47.0.001
 [v4.46.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.46.0.001...v4.46.0.002
 [v4.46.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.45.0.001...v4.46.0.001
 [v4.45.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.43.0.004...v4.45.0.001
@@ -599,9 +609,9 @@
 [v4.39.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/selenium-helper-4.39.0.002...v4.39.0.002
 [selenium-helper-4.39.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.39.0.001...selenium-helper-4.39.0.002
 [v4.39.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.39.0.001...v4.39.0.001
-[4.39.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.38.0.001...4.39.0.001
-[4.38.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.38.0.001...4.38.0.001
-[v4.38.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.36.0.002...v4.38.0.001
+[4.39.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.38.0.001...4.39.0.001
+[v4.38.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.38.0.001...v4.38.0.001
+[4.38.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.36.0.002...4.38.0.001
 [v4.36.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.36.0.002...v4.36.0.002
 [4.36.0.002]: https://github.com/qld-gov-au/kiteworks-integration/compare/4.36.0.001...4.36.0.002
 [4.36.0.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.36.0.001...4.36.0.001
@@ -627,9 +637,9 @@
 [4.1.4.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.1.4.001...4.1.4.001
 [v4.1.4.001]: https://github.com/qld-gov-au/kiteworks-integration/compare/v4.1.4...v4.1.4.001
 [v4.1.4]: https://github.com/qld-gov-au/kiteworks-integration/compare/v1.0.8...v4.1.4
-[v1.0.8]: https://github.com/qld-gov-au/kiteworks-integration/compare/v1.0.7...v1.0.8
-[v1.0.7]: https://github.com/qld-gov-au/kiteworks-integration/compare/1.0.7...v1.0.7
-[1.0.7]: https://github.com/qld-gov-au/kiteworks-integration/compare/v1.0.5...1.0.7
+[v1.0.8]: https://github.com/qld-gov-au/kiteworks-integration/compare/1.0.7...v1.0.8
+[1.0.7]: https://github.com/qld-gov-au/kiteworks-integration/compare/v1.0.7...1.0.7
+[v1.0.7]: https://github.com/qld-gov-au/kiteworks-integration/compare/v1.0.5...v1.0.7
 [v1.0.5]: https://github.com/qld-gov-au/kiteworks-integration/compare/seleniumHelper-1.0.5...v1.0.5
 [seleniumHelper-1.0.5]: https://github.com/qld-gov-au/kiteworks-integration/compare/1.0.4...seleniumHelper-1.0.5
 [1.0.4]: https://github.com/qld-gov-au/kiteworks-integration/compare/v1.0.4...1.0.4
