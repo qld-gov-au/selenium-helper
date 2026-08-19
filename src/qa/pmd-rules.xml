@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="Custom Rules"
-         xmlns="https://pmd.github.io/pmd-7.0.0/pmd-ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://pmd.github.io/pmd-7.0.0/pmd-ruleset https://pmd.github.io/pmd-7.0.0/pmd-ruleset.xsd">
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
 
     <description>
-        Custom PMD rules for the project — updated for PMD 7.14.
+        Custom PMD rules for the project — updated for PMD 7.26.0.
     </description>
 
     <!-- Best practices category -->
@@ -16,6 +16,7 @@
         <exclude name="PreserveStackTrace"/>
         <exclude name="JUnitUseExpected"/>
         <exclude name="MethodReturnsInternalArray"/>
+        <exclude name="ExhaustiveSwitchHasDefault"/><!-- default for covering future miss events -->
     </rule>
 
     <!-- Error-prone category -->

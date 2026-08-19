@@ -4,7 +4,7 @@
 
     <groupId>au.gov.qld.services.selenium</groupId>
     <artifactId>selenium-helper</artifactId>
-    <version>4.46.0.003-SNAPSHOT</version>
+    <version>4.47.0.001-SNAPSHOT</version>
     <url>https://github.com/qld-gov-au/selenium-helper</url>
     <name>Selenium Helper for Qld Government</name>
     <description>Selenium Helper for Qld Government - Test helper for integration testing</description>
@@ -98,11 +98,14 @@
             </exclusions>
         </dependency>
         <dependency><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.20.0</version></dependency>
+        <dependency><groupId>org.jspecify</groupId><artifactId>jspecify</artifactId><version>1.0.1</version></dependency>
         <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>selenium-java</artifactId><version>${selenium.version}</version>
             <exclusions>
                 <exclusion><groupId>commons-codec</groupId><artifactId>commons-codec</artifactId></exclusion>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-compress</artifactId></exclusion>
                 <exclusion><groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId></exclusion>
+                <!-- jspecify guava uses 1.0.0, selenium* users 1.0.1 -_- -->
+                <exclusion><groupId>org.jspecify</groupId><artifactId>jspecify</artifactId></exclusion>
             </exclusions>
         </dependency>
         <dependency><groupId>org.seleniumhq.selenium</groupId><artifactId>htmlunit3-driver</artifactId><version>${selenium.version}</version>
