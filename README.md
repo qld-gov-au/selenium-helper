@@ -114,12 +114,20 @@ is as follows:
    
    A list of all available languages can be found using `apt-cache search firefox-l10n`.
 
+## Grid usage
+example docker-compose in repo.
+
+```
+podman compose up
+selenium_grid_url=http://localhost:4444  mvn clean install
+```
+
 ### Change log
 
 * Allow hand off without deleting cookies
 * Allow browser reuse to be changed from default 10 to your preferred usage.
 * Allow download directory to be set on browser creation
-
+* Add Grid for Firefox and Chrome
 
 
 

@@ -8,11 +8,13 @@ public class WebDriverHolder {
     private final DriverTypes driverType;
     private int numberUsed = 0;
     private final String downloadDirectory;
+    private final boolean isGrid;
 
-    public WebDriverHolder(WebDriver webDriver, DriverTypes driverType, String downloadDirectory) {
+    public WebDriverHolder(WebDriver webDriver, DriverTypes driverType, String downloadDirectory, boolean isGrid) {
         this.webDriver = webDriver;
         this.driverType = driverType;
         this.downloadDirectory = downloadDirectory;
+        this.isGrid = isGrid;
     }
 
     public WebDriver getWebDriver() {
@@ -34,5 +36,9 @@ public class WebDriverHolder {
 
     public String getDownloadDirectory() {
         return downloadDirectory;
+    }
+
+    public boolean isGrid() {
+        return isGrid;
     }
 }

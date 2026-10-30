@@ -5,17 +5,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Proxy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.*;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.support.ui.FluentWait;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -179,7 +179,7 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriver);
-        holder.getWebDriver().navigate().to("https://google.com/");
+        holder.getWebDriver().navigate().to("https://example.com/");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
@@ -189,7 +189,27 @@ public class SeleniumHelperTest {
         String testName = new Object(){}.getClass().getEnclosingMethod().getName();
         SeleniumHelper.setDoScreenPrints(true);
         holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriverWithJS);
-        holder.getWebDriver().navigate().to("https://www.google.com/");
+        holder.getWebDriver().navigate().to("https://www.example.com/");
+        SeleniumHelper.performScreenPrint(holder, testName);
+        SeleniumHelper.close(holder);
+    }
+
+    @Test
+    public void shouldStartHtmlUnitWithOutJSAndCSSBrowser() {
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        SeleniumHelper.setDoScreenPrints(true);
+        holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriverNoCSS);
+        holder.getWebDriver().navigate().to("https://www.example.com/");
+        SeleniumHelper.performScreenPrint(holder, testName);
+        SeleniumHelper.close(holder);
+    }
+
+    @Test
+    public void shouldStartHtmlUnitWithJSAndCSSBrowser() {
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        SeleniumHelper.setDoScreenPrints(true);
+        holder = SeleniumHelper.getWebDriver(DriverTypes.HtmlUnitDriverWithJSNoCSS);
+        holder.getWebDriver().navigate().to("https://www.example.com/");
         SeleniumHelper.performScreenPrint(holder, testName);
         SeleniumHelper.close(holder);
     }
@@ -221,8 +241,20 @@ public class SeleniumHelperTest {
         holder = SeleniumHelper.getWebDriver(DriverTypes.CHROME, downloadFilepath);
         // Download a test file from staging.data.qld.gov.au: "testfile.xlsx"
         holder.getWebDriver().navigate().to("https://www.data.qld.gov.au/dataset/c4aa9fdf-0f43-4617-8afa-efaf43d5e533/resource/fd3b2d83-b198-487a-8845-0e47792ce2e5/download/queensland-first-home-owners-grant-by-statistical-area_2018-19-to-31dec18.csv");
+
         FluentWait<WebDriver> wait = new FluentWait<>(holder.getWebDriver()).withTimeout(Duration.ofSeconds(10L)).pollingEvery(Duration.ofMillis(100));
+
+        if (holder.isGrid()) {
+            WebDriver augmentedDriver = new Augmenter().augment(holder.getWebDriver());
+            wait.until(x-> !((HasDownloads) augmentedDriver).getDownloadableFiles().isEmpty());
+            List<String> files = ((HasDownloads) augmentedDriver).getDownloadableFiles();
+
+            String fileName = files.get(0);
+            ((HasDownloads) augmentedDriver).downloadFile(fileName, Paths.get(downloadFilepath));
+        }
+
         File downloadedFile = new File(downloadFilepath + filename);
+
         wait.until(x -> downloadedFile.exists());
         try {
             Assertions.assertThat(downloadedFile).exists();
