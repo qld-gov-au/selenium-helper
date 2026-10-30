@@ -242,8 +242,11 @@ public class SeleniumHelperTest {
         // Download a test file from staging.data.qld.gov.au: "testfile.xlsx"
         holder.getWebDriver().navigate().to("https://www.data.qld.gov.au/dataset/c4aa9fdf-0f43-4617-8afa-efaf43d5e533/resource/fd3b2d83-b198-487a-8845-0e47792ce2e5/download/queensland-first-home-owners-grant-by-statistical-area_2018-19-to-31dec18.csv");
 
+        FluentWait<WebDriver> wait = new FluentWait<>(holder.getWebDriver()).withTimeout(Duration.ofSeconds(10L)).pollingEvery(Duration.ofMillis(100));
+
         if (holder.isGrid()) {
             WebDriver augmentedDriver = new Augmenter().augment(holder.getWebDriver());
+            wait.until(x-> !((HasDownloads) augmentedDriver).getDownloadableFiles().isEmpty());
             List<String> files = ((HasDownloads) augmentedDriver).getDownloadableFiles();
 
             String fileName = files.get(0);
@@ -252,7 +255,6 @@ public class SeleniumHelperTest {
 
         File downloadedFile = new File(downloadFilepath + filename);
 
-        FluentWait<WebDriver> wait = new FluentWait<>(holder.getWebDriver()).withTimeout(Duration.ofSeconds(10L)).pollingEvery(Duration.ofMillis(100));
         wait.until(x -> downloadedFile.exists());
         try {
             Assertions.assertThat(downloadedFile).exists();
