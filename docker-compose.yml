@@ -1,0 +1,53 @@
+---
+services:
+  chrome:
+    image: selenium/node-chrome:151.0.7922.173-chromedriver-151.0.7922.138-grid-4.51.0-20261010
+    networks:
+      - default
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_VNC_NO_PASSWORD=true
+      - SE_NODE_MAX_SESSIONS=4
+      - SE_OPTS="--enable-managed-downloads true"
+    extra_hosts:
+      # Allow chrome/grid to see container service
+      - "host.containers.internal:host-gateway"
+      # point some unnecessary domains at localhost
+      - "www.googletagmanager.com:127.0.0.1"
+      - "fonts.gstatic.com:127.0.0.1"
+      - "gravatar.com:127.0.0.1"
+
+  firefox:
+    image: selenium/node-firefox:129.0-geckodriver-0.37-grid-4.51.0-20261010
+    networks:
+      - default
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_VNC_NO_PASSWORD=true
+      - SE_NODE_MAX_SESSIONS=4
+      - SE_OPTS="--enable-managed-downloads true"
+    extra_hosts:
+      # Allow chrome/grid to see container service
+      - "host.containers.internal:host-gateway"
+      # point some unnecessary domains at localhost
+      - "www.googletagmanager.com:127.0.0.1"
+      - "fonts.gstatic.com:127.0.0.1"
+      - "gravatar.com:127.0.0.1"
+
+  selenium-hub:
+    image: selenium/hub:4.51.0-20261010
+    networks:
+      - default
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+    environment:
+      - "SE_VNC_NO_PASSWORD=true"

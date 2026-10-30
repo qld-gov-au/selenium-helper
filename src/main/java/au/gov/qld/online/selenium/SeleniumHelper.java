@@ -5,7 +5,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
+import org.apache.http.conn.DnsResolver;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.htmlunit.BrowserVersion;
+import org.htmlunit.HttpWebConnection;
 import org.htmlunit.WebClient;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -39,7 +42,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -75,6 +81,19 @@ public final class SeleniumHelper {
     private static boolean headlessEnabled = true;
 
     private static Proxy proxy;
+
+    private static String chromeHostResolverRules = "MAP www.google-analytics.com 127.0.0.1, MAP www.googletagmanager.com 127.0.0.1";
+    //HTML Unit driver is not designed to run from grid/container so mimic container to host by setting it to localhost
+    private static String htmlUnitHostMapping = "host.containers.internal=127.0.0.1,www.google-analytics.com=127.0.0.1,www.googletagmanager.com=127.0.0.1";
+
+    public static void setGridUrl(String gridUrlIncome) {
+        gridUrl = gridUrlIncome;
+        isRemoteGrid =  StringUtils.isNotBlank(gridUrlIncome);
+    }
+
+    private static String gridUrl;
+    private static boolean isRemoteGrid;
+
     /**
      * This cleans up anything that used this helper class
      */
@@ -111,6 +130,10 @@ public final class SeleniumHelper {
         webDriverListReleased.clear();
     }
 
+    public static final String CHROME_HOST_RESOLVER_RULES = "chromeHostResolverRules";
+
+    public static final String HTML_UNIT_HOST_MAPPING = "htmlUnitHostMapping";
+
     static {
         if (StringUtils.isNotBlank(System.getProperty("headless.disabled"))) {
             LOGGER.debug("headless disabled");
@@ -128,6 +151,23 @@ public final class SeleniumHelper {
             LOGGER.debug("screenprints enabled");
             doScreenPrints = true;
         }
+        if (StringUtils.isNotBlank(System.getProperty(CHROME_HOST_RESOLVER_RULES))) {
+            LOGGER.debug("altering Chrome Host Resolver vis Sys properties");
+            chromeHostResolverRules = System.getProperty(CHROME_HOST_RESOLVER_RULES);
+        }
+        if (StringUtils.isNotBlank(getEnvIgnoreCase(CHROME_HOST_RESOLVER_RULES))) {
+            LOGGER.debug("altering Chrome Host Resolver via Env properties");
+            chromeHostResolverRules = getEnvIgnoreCase(CHROME_HOST_RESOLVER_RULES);
+        }
+        if (StringUtils.isNotBlank(System.getProperty(HTML_UNIT_HOST_MAPPING))) {
+            LOGGER.debug("altering HtmlUnitHost Mapping via Sys properties");
+            htmlUnitHostMapping = System.getProperty(HTML_UNIT_HOST_MAPPING);
+        }
+        if (StringUtils.isNotBlank(getEnvIgnoreCase(HTML_UNIT_HOST_MAPPING))) {
+            LOGGER.debug("altering HtmlUnitHost Mapping via Env properties");
+            htmlUnitHostMapping = getEnvIgnoreCase(HTML_UNIT_HOST_MAPPING);
+        }
+        setGridUrl(getEnvIgnoreCase("selenium_grid_url"));
 
         proxyConfig();
 
@@ -247,27 +287,40 @@ public final class SeleniumHelper {
         }
 
         WebDriver webDriver;
+        boolean browserIsRemoveGrid = false;
         WebDriverManager wdm;
         try {
             final Platform platform = Platform.getCurrent();
             final String browserDownloadOption = "browser.download.dir";
             switch (driverType) {
                 case CHROME:
-                    setupChromeService();
+                    if (isRemoteGrid) {
+                        LOGGER.info("Connecting to remote Selenium Grid at: {}", gridUrl);
+                    } else {
+                        LOGGER.info("No Grid URL detected. Starting local Chrome service...");
+                        setupChromeService();
+                    }
                     DesiredCapabilities capabilities = new DesiredCapabilities();
                     final ChromeOptions chromeOptions = new ChromeOptions();
-                    chromeOptions.addArguments("--host-resolver-rules=MAP www.google-analytics.com 127.0.0.1, www.googletagmanager.com 127.0.0.1");
+                    chromeOptions.addArguments("--host-resolver-rules=" + chromeHostResolverRules);
                     chromeOptions.addArguments("--disable-gpu");
                     chromeOptions.addArguments("--no-sandbox");
                     chromeOptions.addArguments("--disable-extensions");
                     chromeOptions.addArguments("--disable-dev-shm-usage");
-                    chromeOptions.addArguments("--crash-dumps-dir=/tmp");
-                    if (headlessEnabled) {
-                        chromeOptions.addArguments("--headless=new");
+                    if (!isRemoteGrid) {
+                        chromeOptions.addArguments("--crash-dumps-dir=/tmp");
+                    }
+                    if (headlessEnabled && !isRemoteGrid) {
+                        chromeOptions.addArguments("--headless");
                     }
                     if (downloadDirectory != null) {
                         Map<String, Object> chromePrefs = new HashMap<>();
-                        chromePrefs.put("download.default_directory", downloadDirectory);
+                        if (isRemoteGrid) {
+                            LOGGER.info("Grid can't set download default_directory, using grid downloadsEnabled");
+                            chromeOptions.setCapability("se:downloadsEnabled", true);
+                        } else {
+                            chromePrefs.put("download.default_directory", downloadDirectory);
+                        }
                         chromePrefs.put("plugins.always_open_pdf_externally", true);
                         chromePrefs.put("download.prompt_for_download", false);
                         chromePrefs.put("profile.default_content_settings.popups", 0);
@@ -278,30 +331,65 @@ public final class SeleniumHelper {
                     if (proxy != null) {
                         chromeOptions.setProxy(proxy);
                     }
-                    webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
+                    try {
+                        if (isRemoteGrid) {
+                            webDriver = new RemoteWebDriver(new URL(gridUrl), chromeOptions);
+                            browserIsRemoveGrid = true;
+                        } else {
+                            webDriver = new RemoteWebDriver(chromeService.getUrl(), chromeOptions);
+                        }
+                    } catch (Exception e) {
+                        throw new WebDriverException("Failed to connect to Chrome: " + (isRemoteGrid ? gridUrl : "Local Service"), e);
+                    }
+
                     break;
                 case FIREFOX:
-                    wdm = WebDriverManager.firefoxdriver();
                     final FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    wdm.config().setTimeout(30);
-                    if (proxy != null) {
-                        firefoxOptions.setProxy(proxy);
-                        wdm.config().setProxy(proxy.getHttpProxy());
+                    if (isRemoteGrid) {
+                        LOGGER.info("Connecting to remote Selenium Grid at: {}", gridUrl);
+                        if (proxy != null) {
+                            firefoxOptions.setProxy(proxy);
+                        }
+                    } else {
+                        LOGGER.info("No Grid URL detected. Starting local Firefox service...");
+
+                        wdm = WebDriverManager.firefoxdriver();
+                        wdm.config().setTimeout(30);
+                        if (proxy != null) {
+                            firefoxOptions.setProxy(proxy);
+                            wdm.config().setProxy(proxy.getHttpProxy());
+                        }
+                        wdm.setup();
                     }
-                    wdm.setup();
-                    if (headlessEnabled) {
+                    if (headlessEnabled && !isRemoteGrid) {
                         firefoxOptions.addArguments("-headless");
                     }
                     if (downloadDirectory != null) {
                         firefoxOptions.addPreference("browser.download.folderList", 2);
-                        firefoxOptions.addPreference(browserDownloadOption, downloadDirectory);
+                        if (isRemoteGrid) {
+                            LOGGER.info("Grid can't set download default_directory, use grid downloadsEnabled instead");
+                            firefoxOptions.setCapability("se:downloadsEnabled", true);
+                        } else {
+                            firefoxOptions.addPreference(browserDownloadOption, downloadDirectory);
+                        }
                         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
                     }
                     firefoxOptions.addPreference("devtools.jsonview.enabled", false);
-                    GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
-                    geckoDriverService.start();
-                    driverServiceAll.add(geckoDriverService);
-                    webDriver = new FirefoxDriver(geckoDriverService, firefoxOptions);
+
+                    try {
+                        if (isRemoteGrid) {
+                            webDriver = new RemoteWebDriver(new URL(gridUrl), firefoxOptions);
+                            browserIsRemoveGrid = true;
+                        } else {
+                            GeckoDriverService geckoDriverService = new GeckoDriverService.Builder().usingAnyFreePort().build();
+                            geckoDriverService.start();
+                            driverServiceAll.add(geckoDriverService);
+                            webDriver = new FirefoxDriver(geckoDriverService, firefoxOptions);
+                        }
+                    } catch (Exception e) {
+                        throw new WebDriverException("Failed to connect to Firefox: " + (isRemoteGrid ? gridUrl : "Local Service"), e);
+                    }
+
                     break;
                 case EDGE:
                     if (platform.is(WINDOWS)) {
@@ -382,7 +470,7 @@ public final class SeleniumHelper {
             LOGGER.error("Error Message: ", e);
             throw new IllegalStateException(e);
         }
-        WebDriverHolder holder = new WebDriverHolder(webDriver, driverType, downloadDirectory);
+        WebDriverHolder holder = new WebDriverHolder(webDriver, driverType, downloadDirectory, browserIsRemoveGrid);
         webDriverListAll.add(webDriver);
         return holder;
     }
@@ -394,12 +482,36 @@ public final class SeleniumHelper {
     private static HtmlUnitDriver createHtmlUnitDriver(final boolean enableJavascript, final boolean enableCSS) {
         HtmlUnitDriver driver;
         //Mimic google chrome latest but sadly its still rhino and can't do 'class' js and advance css.
+
+        DnsResolver customDnsResolver = new DnsResolver() {
+            @Override
+            public InetAddress[] resolve(String host) throws UnknownHostException {
+                String[] mappings = htmlUnitHostMapping.split(",");
+                for (String mapping : mappings) {
+                    String[] mappingRecord = mapping.split("=");
+                    if (Strings.CI.equals(mappingRecord[0], host)) {
+                        return  InetAddress.getAllByName(mappingRecord[1]);
+                    }
+                }
+                return InetAddress.getAllByName(host);
+            }
+        };
+
         driver = new HtmlUnitDriver(BrowserVersion.CHROME) {
             @Override
             protected WebClient modifyWebClient(WebClient client) {
                 client.getOptions().setThrowExceptionOnScriptError(false);
                 client.getOptions().setJavaScriptEnabled(enableJavascript);
                 client.getOptions().setCssEnabled(enableCSS);
+                client.setWebConnection(new HttpWebConnection(client) {
+                    @Override
+                    protected HttpClientBuilder createHttpClientBuilder() {
+                        HttpClientBuilder builder = super.createHttpClientBuilder();
+                        builder.setDnsResolver(customDnsResolver);
+                        return builder;
+                    }
+                });
+
                 return client;
             }
         };
@@ -548,4 +660,7 @@ public final class SeleniumHelper {
         SeleniumHelper.maxBrowserUsage = maxBrowserUsage;
     }
 
+    public static boolean isIsRemoteGrid() {
+        return isRemoteGrid;
+    }
 }
