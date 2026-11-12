@@ -84,7 +84,7 @@ public final class SeleniumHelper {
 
     private static String chromeHostResolverRules = "MAP www.google-analytics.com 127.0.0.1, MAP www.googletagmanager.com 127.0.0.1";
     //HTML Unit driver is not designed to run from grid/container so mimic container to host by setting it to localhost
-    private static String htmlUnitHostMapping = "host.containers.internal=127.0.0.1,www.google-analytics.com=127.0.0.1,www.googletagmanager.com=127.0.0.1";
+    private static String htmlUnitHostMapping = "localhost.localdomain=127.0.0.1,www.google-analytics.com=127.0.0.1,www.googletagmanager.com=127.0.0.1";
 
     public static void setGridUrl(String gridUrlIncome) {
         gridUrl = gridUrlIncome;
@@ -235,7 +235,11 @@ public final class SeleniumHelper {
 
         if (nonProxyHosts != null && !nonProxyHosts.isEmpty()) {
             //Ensure java proxy is pipe delimited.
-            System.setProperty("http.nonProxyHosts", nonProxyHosts.replaceAll(",", "|"));
+            String nonProxyHostsString =  nonProxyHosts.replaceAll(",", "|");
+            System.setProperty("http.nonProxyHosts", nonProxyHostsString);
+        } else {
+            String nonProxyLocalhosts = "localhost|localhost.localdomain|127.0.0.1|::1";
+            System.setProperty("http.nonProxyHosts", nonProxyLocalhosts);
         }
 
         String systemHttpsProxyHost = System.getProperty("https.proxyHost");
@@ -328,6 +332,7 @@ public final class SeleniumHelper {
                     }
                     chromeOptions.addArguments("--remote-allow-origins=*");
                     chromeOptions.merge(capabilities);
+                    chromeOptions.setPageLoadStrategy(org.openqa.selenium.PageLoadStrategy.NORMAL);
                     if (proxy != null) {
                         chromeOptions.setProxy(proxy);
                     }
@@ -375,6 +380,7 @@ public final class SeleniumHelper {
                         firefoxOptions.addPreference("browser.download.useDownloadDir", true);
                     }
                     firefoxOptions.addPreference("devtools.jsonview.enabled", false);
+                    firefoxOptions.setPageLoadStrategy(org.openqa.selenium.PageLoadStrategy.NORMAL);
 
                     try {
                         if (isRemoteGrid) {
